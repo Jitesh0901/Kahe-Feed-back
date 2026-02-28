@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gen AI Course Feedback | KAHE</title>
+    <meta name="description"
+        content="Official student feedback form for the Gen AI Course at Karpagam Academy of Higher Education (KAHE), Coimbatore">
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="page-bg">
+        <div class="container">
+            <div class="form-wrapper">
+
+                <!-- ══════════ KAHE CAMPUS BANNER ══════════ -->
+                <div class="campus-banner">
+                    <img src="kahe_campus.jpg" alt="KAHE Campus — Karpagam Academy of Higher Education, Coimbatore"
+                        class="campus-img">
+                    <div class="campus-overlay"></div>
+                    <div class="campus-tag">Coimbatore — 641 021, Tamil Nadu, India</div>
+                </div>
+
+                <!-- ══════════ KAHE COLLEGE HEADER ══════════ -->
+                <div class="header">
+                    <!-- Logo + College Identity -->
+                    <div class="college-identity">
+                        <div class="college-logo-wrap">
+                            <img src="kahe_logo.png" alt="KAHE Logo" class="college-logo">
+                        </div>
+                        <div class="college-info">
+                            <p class="college-estd">Established 1997 &nbsp;|&nbsp; NAAC Accredited &nbsp;|&nbsp; NIRF
+                                Ranked</p>
+                            <h1 class="college-name">Karpagam Academy of<br>Higher Education</h1>
+                            <p class="college-abbr">( KAHE — Deemed to be University )</p>
+                        </div>
+                    </div>
+
+
+                    <!-- Form Title -->
+                    <div class="header-divider"></div>
+                    <h2 class="form-title">🤖 MSME Course Feedback Form</h2>
+                    <p class="header-subtitle">Your honest feedback helps us improve and deliver exceptional Gen AI
+                        learning experiences.</p>
+
+
+                </div>
+
+                <form id="feedbackForm" novalidate>
+
+                    <!-- ══════════ SECTION 1: STUDENT DETAILS ══════════ -->
+                    <div class="section-card">
+                        <div class="section-header">
+
+                            <div>
+                                <h2 class="section-title">Student Details</h2>
+                                <p class="section-desc">Please fill in your academic information accurately.</p>
+                            </div>
+                        </div>
+
+                        <!-- Student Name -->
+                        <div class="input-group">
+                            <label for="studentName">
+                                <span class="label-icon">👤</span> Student Name
+                                <span class="required">*</span>
+                            </label>
+                            <input type="text" id="studentName" name="studentName" required
+                                placeholder="e.g. Rahul Sharma" autocomplete="name">
+                            <span class="field-error" id="err-studentName"></span>
+                        </div>
+
+                        <!-- Student ID -->
+                        <div class="input-group">
+                            <label for="rollNumber">
+                                <span class="label-icon">🎫</span> Student ID
+                                <span class="required">*</span>
+                            </label>
+                            <input type="text" id="rollNumber" name="rollNumber" required placeholder="e.g. 25CAU111">
+                            <span class="field-error" id="err-rollNumber"></span>
+                        </div>
+
+                        <!-- Student Degree -->
+                        <div class="input-group">
+                            <label for="studentDegree">
+                                <span class="label-icon">🏛️</span> STUDENT DEGREE
+                                <span class="required">*</span>
+                            </label>
+                            <select id="studentDegree" name="studentDegree" required>
+                                <option value="" disabled selected>CHOOSE THE ONE OF THE DEGREE</option>
+                                <option value="BSc. CS Cognitive Systems">BSc. CS Cognitive Systems</option>
+                                <option value="BSc. IT">BSc. IT</option>
+                                <option value="BSc. Computer Technology">BSc. Computer Technology</option>
+                                <option value="BCA">BCA</option>
+                                <option value="BSc. AI & DS">BSc. AI & DS</option>
+                                <option value="BSc. Computer Science">BSc. Computer Science</option>
+                                <option value="BSc. CS Cyber Security">BSc. CS Cyber Security</option>
+                            </select>
+                            <span class="field-error" id="err-studentDegree"></span>
+                        </div>
+                    </div>
+
+                    <!-- ══════════ SECTION 2: COURSE QUESTIONS ══════════ -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <div>
+                                <h2 class="section-title">Course Evaluation</h2>
+                                <p class="section-desc">Please answer the following questions honestly to help us
+                                    improve.</p>
+                            </div>
+                        </div>
+
+                        <!-- Q1: Area of Interest (Text Box) -->
+                        <div class="question-card" id="q1-card">
+                            <div class="q-meta">
+                                <span class="q-num">Q1</span>
+                                <p class="q-text">What is your <strong>Area of Interest</strong>? (Data Analytics,
+                                    Gaming development, Gen AI, Programming, Business, Farming etc..feel free to add
+                                    your interesting area)</p>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="q1" name="q1" required
+                                    placeholder="Enter your area of interest...">
+                            </div>
+                            <span class="field-error" id="err-q1"></span>
+                        </div>
+
+                        <!-- Q2: Your Trainer - Mentor (Multiple Choice) -->
+                        <div class="question-card" id="q2-card">
+                            <div class="q-meta">
+                                <span class="q-num">Q2</span>
+                                <p class="q-text">Your <strong>Trainer - Mentor</strong></p>
+                            </div>
+                            <div class="radio-list">
+                                <label class="radio-item">
+                                    <input type="radio" name="q2" value="Mr. Gokul" required>
+                                    <span class="radio-text">1. Mr. Gokul</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q2" value="Mr. Midhun">
+                                    <span class="radio-text">2. Mr. Midhun</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q2" value="Mr. Abhishek/Sriram/Dr.Arun/Sailesh">
+                                    <span class="radio-text">3. Mr. Abhishek/Sriram/Dr.Arun/Sailesh</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q2" value="Mr. Mohammed Hisham">
+                                    <span class="radio-text">4. Mr. Mohammed Hisham</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q2" value="Mr. Bhoopalan">
+                                    <span class="radio-text">5. Mr. Bhoopalan</span>
+                                </label>
+                            </div>
+                            <span class="field-error" id="err-q2"></span>
+                        </div>
+
+                        <!-- Q3: Trainer ignited interest (Multiple Choice) -->
+                        <div class="question-card" id="q3-card">
+                            <div class="q-meta">
+                                <span class="q-num">Q3</span>
+                                <p class="q-text">Did the Trainer <strong>ignite your interest</strong> in the field of
+                                    GEN AI?</p>
+                            </div>
+                            <div class="radio-list">
+                                <label class="radio-item">
+                                    <input type="radio" name="q3" value="OfCourse" required>
+                                    <span class="radio-text">1. OfCourse</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q3" value="Yes to a Large Extent">
+                                    <span class="radio-text">2. Yes to a Large Extent</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q3" value="Yes to some extent.">
+                                    <span class="radio-text">3. Yes to some extent.</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q3" value="I need do a lot of catching up">
+                                    <span class="radio-text">4. I need do a lot of catching up</span>
+                                </label>
+                            </div>
+                            <span class="field-error" id="err-q3"></span>
+                        </div>
+
+                        <!-- Q4: Lab/Environment support (Multiple Choice) -->
+                        <div class="question-card" id="q4-card">
+                            <div class="q-meta">
+                                <span class="q-num">Q4</span>
+                                <p class="q-text">Did the <strong>lab, environment infrastructure</strong> support your
+                                    learning needs?</p>
+                            </div>
+                            <div class="radio-list">
+                                <label class="radio-item">
+                                    <input type="radio" name="q4" value="Yes, to a large extent" required>
+                                    <span class="radio-text">1. Yes, to a large extent</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q4" value="No">
+                                    <span class="radio-text">2. No</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="q4" value="Did not Get a system">
+                                    <span class="radio-text">3. Did not Get a system</span>
+                                </label>
+                            </div>
+                            <span class="field-error" id="err-q4"></span>
+                        </div>
+
+                        <!-- Q5: Training Rating (Rating Scale) -->
+                        <div class="question-card" id="q5-card">
+                            <div class="q-meta">
+                                <span class="q-num">Q5</span>
+                                <p class="q-text">How would you rate your Complete Training on <strong>Gen AI
+                                        Overall</strong> (On a scale of 1 to 5 where 5 is Max and 1 Min)?</p>
+                            </div>
+                            <div class="rating" id="rating-q5" data-name="q5">
+                                <input type="radio" id="q5s5" name="q5" value="5"><label for="q5s5"
+                                    title="5 - Excellent">★</label>
+                                <input type="radio" id="q5s4" name="q5" value="4"><label for="q5s4"
+                                    title="4 - Very Good">★</label>
+                                <input type="radio" id="q5s3" name="q5" value="3"><label for="q5s3"
+                                    title="3 - Good">★</label>
+                                <input type="radio" id="q5s2" name="q5" value="2"><label for="q5s2"
+                                    title="2 - Fair">★</label>
+                                <input type="radio" id="q5s1" name="q5" value="1"><label for="q5s1"
+                                    title="1 - Poor">★</label>
+                            </div>
+                            <span class="rating-label" id="label-q5"></span>
+                            <span class="field-error" id="err-q5"></span>
+                        </div>
+
+                        <!-- Q6: Tools to use (Text Box) -->
+                        <div class="question-card" id="q6-card">
+                            <div class="q-meta">
+                                <span class="q-num">Q6</span>
+                                <p class="q-text">Which <strong>tools</strong> will you starting using from tomorrow
+                                    itself?</p>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="q6" name="q6" required placeholder="Enter tools you will use...">
+                            </div>
+                            <span class="field-error" id="err-q6"></span>
+                        </div>
+
+                        <!-- Q7: Personal Review (Paragraph Text Box) -->
+                        <div class="question-card" id="q7-card">
+                            <div class="q-meta">
+                                <span class="q-num">Q7</span>
+                                <p class="q-text">Please write your <strong>personal review</strong> on what you liked
+                                    about the program and where there can be some improvement.</p>
+                                <p class="q-subtext">(You may write in English/Tamil or Tanglish)</p>
+                            </div>
+                            <div class="input-group">
+                                <textarea id="q7" name="q7" rows="5" required
+                                    placeholder="Write your review here..."></textarea>
+                            </div>
+                            <span class="field-error" id="err-q7"></span>
+                        </div>
+                    </div>
+
+                    <!-- ══════════ SUBMIT ══════════ -->
+                    <button type="submit" id="submitBtn" class="submit-btn" disabled>
+                        <span class="btn-icon-lock" id="btnLockIcon">🔒</span>
+                        <span class="btn-text" id="btnText">Complete All Sections</span>
+                        <span class="spinner hidden" id="spinner"></span>
+                    </button>
+                    <p class="submit-hint" id="submitHint">⬆️ Fill all required fields above to unlock submission</p>
+
+                </form>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden message error">
+                    <div class="msg-icon">❌</div>
+                    <div>
+                        <strong>Submission Failed.</strong><br>
+                        Please check your connection and try again.
+                    </div>
+                </div>
+
+
+                <!-- Footer -->
+                <div class="form-footer">
+                    <p>© 2025 J-Impact Creative Learning Services</p>
+                </div>
+
+            </div><!-- /form-wrapper -->
+        </div><!-- /container -->
+    </div><!-- /page-bg -->
+    <!-- ══════════ PREMIUM SUCCESS OVERLAY ══════════ -->
+    <div id="successOverlay" class="success-overlay hidden" role="dialog" aria-modal="true"
+        aria-labelledby="successTitle">
+
+        <!-- Confetti particles (JS will inject them) -->
+        <div id="confettiContainer" class="confetti-container"></div>
+
+        <!-- Central card -->
+        <div class="success-card" id="successCard">
+
+            <!-- Glow ring + animated checkmark -->
+            <div class="check-ring-wrap">
+                <div class="check-ring"></div>
+                <svg class="check-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="check-circle" cx="40" cy="40" r="36" stroke="url(#cg)" stroke-width="3.5"
+                        fill="none" />
+                    <polyline class="check-tick" points="22,40 34,52 58,28" stroke="url(#cg)" stroke-width="4.5"
+                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                    <defs>
+                        <linearGradient id="cg" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#10b981" />
+                            <stop offset="100%" stop-color="#34d399" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- Headline -->
+            <h2 class="success-title" id="successTitle">Feedback Submitted!</h2>
+            <p class="success-sub">Thank you for taking the time to share your thoughts.<br>Your feedback helps KAHE
+                improve the Gen AI learning experience.</p>
+
+            <!-- Stars showcase -->
+            <div class="success-stars" id="successStars">★★★★★</div>
+
+            <!-- Pill badges -->
+            <div class="success-badges">
+                <span class="sbadge green">✅ Saved to records</span>
+                <span class="sbadge blue">📊 Analytics updated</span>
+            </div>
+
+            <!-- CTA button -->
+            <button class="success-close-btn" id="successCloseBtn">
+                <span>Submit Another Response</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <!-- Subtle KAHE branding -->
+            <p class="success-brand">KAHE — MSME Course Feedback System &nbsp;•&nbsp; 2026</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
