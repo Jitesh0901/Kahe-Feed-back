@@ -91,7 +91,7 @@
                                 <span class="required">*</span>
                             </label>
                             <select id="studentDegree" name="studentDegree" required>
-                                <option value="" disabled selected>CHOOSE THE ONE OF THE DEGREE</option>
+                                <option value="" disabled selected>CHOOSE YOUR DEGREE</option>
                                 <option value="BSc. CS Cognitive Systems">BSc. CS Cognitive Systems</option>
                                 <option value="BSc. IT">BSc. IT</option>
                                 <option value="BSc. Computer Technology">BSc. Computer Technology</option>
@@ -141,8 +141,8 @@
                                     <span class="radio-text">1. Mr. Gokul</span>
                                 </label>
                                 <label class="radio-item">
-                                    <input type="radio" name="q2" value="Mr. Midhun">
-                                    <span class="radio-text">2. Mr. Midhun</span>
+                                    <input type="radio" name="q2" value="Mr. Mithunbarath ">
+                                    <span class="radio-text">2. Mr. Mithunbarath </span>
                                 </label>
                                 <label class="radio-item">
                                     <input type="radio" name="q2" value="Mr. Abhishek/Sriram/Dr.Arun/Sailesh">
@@ -299,50 +299,69 @@
         <!-- Confetti particles (JS will inject them) -->
         <div id="confettiContainer" class="confetti-container"></div>
 
-        <!-- Central card -->
+        <!-- Floating orbs in backdrop -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+
+        <!-- Central glass card -->
         <div class="success-card" id="successCard">
 
-            <!-- Glow ring + animated checkmark -->
+            <!-- Shimmer top bar -->
+            <div class="success-top-bar"></div>
+
+            <!-- Ripple rings + animated checkmark -->
             <div class="check-ring-wrap">
-                <div class="check-ring"></div>
+                <div class="pulse-ring pulse-ring-1"></div>
+                <div class="pulse-ring pulse-ring-2"></div>
+                <div class="pulse-ring pulse-ring-3"></div>
+                <div class="check-glow-bg"></div>
                 <svg class="check-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle class="check-circle" cx="40" cy="40" r="36" stroke="url(#cg)" stroke-width="3.5"
-                        fill="none" />
-                    <polyline class="check-tick" points="22,40 34,52 58,28" stroke="url(#cg)" stroke-width="4.5"
+                    <circle class="check-circle" cx="40" cy="40" r="36" stroke="url(#cg2)" stroke-width="3.5"
+                        fill="rgba(16,185,129,0.08)" />
+                    <polyline class="check-tick" points="22,40 34,52 58,28" stroke="url(#cg2)" stroke-width="5"
                         stroke-linecap="round" stroke-linejoin="round" fill="none" />
                     <defs>
-                        <linearGradient id="cg" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                        <linearGradient id="cg2" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
                             <stop offset="0%" stop-color="#10b981" />
-                            <stop offset="100%" stop-color="#34d399" />
+                            <stop offset="60%" stop-color="#34d399" />
+                            <stop offset="100%" stop-color="#6ee7b7" />
                         </linearGradient>
                     </defs>
                 </svg>
             </div>
 
-            <!-- Headline -->
-            <h2 class="success-title" id="successTitle">Feedback Submitted!</h2>
-            <p class="success-sub">Thank you for taking the time to share your thoughts.<br>Your feedback helps KAHE
-                improve the Gen AI learning experience.</p>
+            <!-- Badge above title -->
+            <div class="success-chip">🎉 Submission Complete</div>
 
-            <!-- Stars showcase -->
+            <!-- Headline -->
+            <h2 class="success-title" id="successTitle">Feedback Received!</h2>
+            <p class="success-sub">Thank you for sharing your thoughts.<br>
+                Your feedback helps KAHE build a better <strong>Gen AI</strong> experience.</p>
+
+            <!-- Divider -->
+            <div class="success-divider"></div>
+
+            <!-- Stars -->
             <div class="success-stars" id="successStars">★★★★★</div>
 
             <!-- Pill badges -->
             <div class="success-badges">
-                <span class="sbadge green">✅ Saved to records</span>
-                <span class="sbadge blue">📊 Analytics updated</span>
+                <span class="sbadge green">✅ Saved to Records</span>
+                <span class="sbadge blue">📊 Analytics Updated</span>
+                <span class="sbadge gold">🏆 Thank You!</span>
             </div>
 
             <!-- CTA button -->
             <button class="success-close-btn" id="successCloseBtn">
-                <span>Submit Another Response</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                     stroke-linecap="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
+                    <path d="M12 5v14M5 12l7 7 7-7" />
                 </svg>
+                <span>Submit Another Response</span>
             </button>
 
-            <!-- Subtle KAHE branding -->
+            <!-- Bottom branding -->
             <p class="success-brand">KAHE — MSME Course Feedback System &nbsp;•&nbsp; 2026</p>
         </div>
     </div>

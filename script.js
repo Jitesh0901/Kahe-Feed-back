@@ -148,18 +148,29 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* ── Confetti ── */
-    var CC = ["#10b981", "#34d399", "#f59e0b", "#fbbf24", "#6366f1", "#a78bfa", "#ec4899", "#0ea5e9"];
+    var CC = ["#10b981", "#34d399", "#6ee7b7", "#f59e0b", "#fbbf24", "#fde68a",
+        "#6366f1", "#a78bfa", "#ec4899", "#f472b6", "#0ea5e9", "#38bdf8", "#c9a84c", "#fff"];
     function launchConfetti() {
         if (!confettiCont) return; confettiCont.innerHTML = "";
-        for (var i = 0; i < 90; i++) {
+        for (var i = 0; i < 130; i++) {
             var p = document.createElement("div"); p.className = "confetti-piece";
-            var s = Math.random() * 10 + 6; var c = CC[Math.floor(Math.random() * CC.length)];
-            p.style.cssText = "left:" + (Math.random() * 100) + "%;" + "width:" + s + "px;height:" + s + "px;background:" + c + ";"
-                + "border-radius:" + (Math.random() > 0.5 ? "50%" : "2px") + ";"
-                + "--dur:" + (Math.random() * 2 + 2.5).toFixed(2) + "s;--delay:" + (Math.random() * 1.2).toFixed(2) + "s;";
+            var s = Math.random() * 12 + 6;
+            var c = CC[Math.floor(Math.random() * CC.length)];
+            var t = Math.random();
+            var br, w, h;
+            if (t < 0.35) { br = "3px"; w = s; h = (s * (0.5 + Math.random() * 0.8)).toFixed(1); }
+            else if (t < 0.65) { br = "50%"; w = s; h = s; }
+            else if (t < 0.85) { br = "2px"; w = (s * 0.35).toFixed(1); h = (s * 2.5).toFixed(1); }
+            else { br = "1px"; w = (s * 1.8).toFixed(1); h = (s * 0.4).toFixed(1); }
+            p.style.cssText = "left:" + (Math.random() * 112 - 6) + "%;" +
+                "top:-" + (Math.random() * 30) + "px;" +
+                "width:" + w + "px;height:" + h + "px;background:" + c + ";" +
+                "border-radius:" + br + ";opacity:0;" +
+                "--dur:" + (Math.random() * 2.5 + 2.8).toFixed(2) + "s;" +
+                "--delay:" + (Math.random() * 1.4).toFixed(2) + "s;";
             confettiCont.appendChild(p);
         }
-        setTimeout(function () { if (confettiCont) confettiCont.innerHTML = ""; }, 6000);
+        setTimeout(function () { if (confettiCont) confettiCont.innerHTML = ""; }, 7000);
     }
 
     /* ── Success overlay ── */
