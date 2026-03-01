@@ -45,10 +45,12 @@
     --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── KAHE Campus Full-Page Background ── */
+/* ══════════════════════════════════════════════════════
+   GLASS WATER — Full-Screen Animated Background
+══════════════════════════════════════════════════════ */
 body {
     min-height: 100vh;
-    background-color: #c8d8e8;
+    background-color: #061424;
     background-image: url('kahe_campus.jpg');
     background-size: cover;
     background-position: center center;
@@ -61,16 +63,218 @@ body {
     justify-content: center;
     align-items: flex-start;
     position: relative;
+    overflow-x: hidden;
 }
 
-/* Soft dark overlay so the white form card pops against the campus photo */
+/* Layer 1 — deep glass tint + 3 animated liquid colour blobs */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: rgba(10, 20, 40, 0.45);
-    pointer-events: none;
     z-index: 0;
+    pointer-events: none;
+    backdrop-filter: blur(2px) saturate(1.3);
+    -webkit-backdrop-filter: blur(2px) saturate(1.3);
+    background:
+        /* base dark glass tint */
+        linear-gradient(160deg,
+            rgba(4, 14, 36, 0.62) 0%,
+            rgba(6, 24, 56, 0.55) 40%,
+            rgba(4, 32, 68, 0.48) 100%),
+        /* blob 1 — large cyan glow, drifts */
+        radial-gradient(ellipse 80% 60% at 15% 50%,
+            rgba(6, 182, 212, 0.28) 0%, transparent 65%),
+        /* blob 2 — deep teal, top-right */
+        radial-gradient(ellipse 70% 55% at 85% 20%,
+            rgba(14, 116, 144, 0.32) 0%, transparent 60%),
+        /* blob 3 — blue shimmer, bottom-centre */
+        radial-gradient(ellipse 90% 50% at 50% 90%,
+            rgba(56, 189, 248, 0.22) 0%, transparent 65%);
+    animation: glassWater1 10s ease-in-out infinite alternate;
+}
+
+/* Layer 2 — glass shimmer + moving light refraction */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        /* top-left light refraction */
+        radial-gradient(ellipse 60% 40% at 0% 0%,
+            rgba(125, 211, 252, 0.14) 0%, transparent 55%),
+        /* centre ripple glow */
+        radial-gradient(ellipse 100% 70% at 50% 50%,
+            rgba(8, 145, 178, 0.10) 0%, transparent 70%),
+        /* bottom-right cool shimmer */
+        radial-gradient(ellipse 65% 45% at 100% 100%,
+            rgba(2, 132, 199, 0.16) 0%, transparent 55%);
+    animation: glassWater2 7s ease-in-out infinite alternate;
+}
+
+/* Blob 1: morphs position + scale smoothly */
+@keyframes glassWater1 {
+    0% {
+        background-position: 0% 0%;
+        opacity: 1;
+        transform: scale(1) translateY(0px);
+        filter: blur(0px);
+    }
+
+    25% {
+        transform: scale(1.03) translateY(-12px);
+        opacity: 0.92;
+    }
+
+    50% {
+        transform: scale(0.98) translateY(-6px);
+        opacity: 1;
+        filter: blur(0.5px);
+    }
+
+    75% {
+        transform: scale(1.04) translateY(-18px);
+        opacity: 0.88;
+    }
+
+    100% {
+        transform: scale(1.01) translateY(-10px);
+        opacity: 0.95;
+        filter: blur(0px);
+    }
+}
+
+/* Blob 2: counter-drift, slightly faster */
+@keyframes glassWater2 {
+    0% {
+        transform: scale(1) translateY(0px) translateX(0px);
+        opacity: 0.85;
+    }
+
+    33% {
+        transform: scale(1.05) translateY(-14px) translateX(8px);
+        opacity: 1;
+    }
+
+    66% {
+        transform: scale(0.97) translateY(-7px) translateX(-6px);
+        opacity: 0.90;
+    }
+
+    100% {
+        transform: scale(1.02) translateY(-20px) translateX(4px);
+        opacity: 0.95;
+    }
+}
+
+/* ── Glass sheen highlight bar (top of screen) ── */
+body .glass-sheen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(125, 211, 252, 0.7) 20%,
+            rgba(255, 255, 255, 0.9) 50%,
+            rgba(56, 189, 248, 0.7) 80%,
+            transparent 100%);
+    z-index: 1;
+    animation: sheenSlide 4s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes sheenSlide {
+    0% {
+        opacity: 0.5;
+        transform: scaleX(0.8) translateX(-10%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scaleX(1.1) translateX(10%);
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   SVG WAVE LAYERS — fixed over the background image
+══════════════════════════════════════════════════ */
+.waves-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    /* Double width so we can scroll it */
+    height: auto;
+    pointer-events: none;
+}
+
+/* Wave 1 — fastest, sits lowest */
+.wave-1 {
+    bottom: 0;
+    height: 180px;
+    animation: waveScroll1 8s linear infinite;
+    opacity: 0.9;
+}
+
+/* Wave 2 — medium, sits slightly higher */
+.wave-2 {
+    bottom: 10px;
+    height: 160px;
+    animation: waveScroll2 12s linear infinite reverse;
+    opacity: 0.75;
+}
+
+/* Wave 3 — slowest, background depth */
+.wave-3 {
+    bottom: 20px;
+    height: 200px;
+    animation: waveScroll3 18s linear infinite;
+    opacity: 0.5;
+}
+
+/* Smooth infinite horizontal scroll for each wave */
+@keyframes waveScroll1 {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes waveScroll2 {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes waveScroll3 {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .page-bg {
@@ -86,15 +290,16 @@ body::before {
     margin: 0 auto;
 }
 
-/* ── Main Form Card ── */
+/* ── Main Form Card — bright white ── */
 .form-wrapper {
-    background: var(--white);
+    background: #ffffff;
     border-radius: 20px;
     box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.95) inset,
-        0 32px 80px rgba(0, 0, 0, 0.22),
-        0 12px 32px rgba(0, 0, 0, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.95);
+        0 1px 0 rgba(255, 255, 255, 1) inset,
+        0 32px 80px rgba(0, 0, 0, 0.28),
+        0 12px 32px rgba(0, 0, 0, 0.18),
+        0 0 0 1px rgba(255, 255, 255, 0.9);
+    border: 1.5px solid rgba(255, 255, 255, 0.98);
     overflow: hidden;
     position: relative;
 }
@@ -308,7 +513,7 @@ body::before {
 .section-card {
     padding: 36px 48px;
     border-bottom: 1px solid var(--granite-light);
-    background: var(--white);
+    background: #ffffff;
 }
 
 .section-card:last-of-type {
@@ -479,7 +684,7 @@ textarea {
 
 /* ── Question Cards ── */
 .question-card {
-    background: #fafaf9;
+    background: #ffffff;
     border: 1.5px solid var(--granite-light);
     border-radius: var(--radius);
     padding: 20px 24px;
@@ -507,6 +712,61 @@ textarea {
     border-color: var(--gold);
     background: #fffdf5;
     box-shadow: 0 2px 12px var(--gold-glow);
+}
+
+/* ── Missing / unfilled card ── */
+.question-card.missing {
+    border-color: #ef4444 !important;
+    background: #fff8f8 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12), 0 2px 12px rgba(239, 68, 68, 0.10) !important;
+    animation: missingPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes missingPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12), 0 2px 12px rgba(239, 68, 68, 0.10);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.22), 0 4px 18px rgba(239, 68, 68, 0.18);
+    }
+}
+
+/* Badge pinned to top-right corner of the missing card */
+.question-card.missing::after {
+    content: '⚠ Required';
+    position: absolute;
+    top: -1px;
+    right: 14px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.4px;
+    padding: 3px 10px;
+    border-radius: 0 0 8px 8px;
+    pointer-events: none;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.28);
+}
+
+/* Also mark text inputs / selects / textareas inside missing cards */
+.question-card.missing input[type="text"],
+.question-card.missing textarea {
+    border-color: #ef4444;
+    background: #fff5f5;
+}
+
+/* Section-level inputs (name/roll/degree) can also go .missing via parent .input-group */
+.input-group.missing input,
+.input-group.missing select,
+.input-group.missing textarea {
+    border-color: #ef4444 !important;
+    background: #fff5f5 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.10);
 }
 
 .q-meta {
@@ -1527,5 +1787,180 @@ textarea {
 
     .orb {
         display: none;
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   TOAST WARNING NOTIFICATION
+   Shows which field is empty when user tries submit
+══════════════════════════════════════════════════ */
+#toastContainer {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast-warn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #fff;
+    border-left: 5px solid #ef4444;
+    border-radius: 12px;
+    padding: 16px 20px 16px 16px;
+    min-width: 300px;
+    max-width: 360px;
+    box-shadow:
+        0 8px 32px rgba(239, 68, 68, 0.18),
+        0 2px 10px rgba(0, 0, 0, 0.10);
+    pointer-events: all;
+    animation: toastSlideIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+    position: relative;
+    overflow: hidden;
+}
+
+.toast-warn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.toast-warn.toast-hide {
+    animation: toastSlideOut 0.32s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.toast-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4));
+}
+
+.toast-body {
+    flex: 1;
+}
+
+.toast-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #b91c1c;
+    margin-bottom: 3px;
+    letter-spacing: 0.1px;
+}
+
+.toast-msg {
+    font-size: 12.5px;
+    color: #4b5563;
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #9ca3af;
+    padding: 0;
+    flex-shrink: 0;
+    line-height: 1;
+    transition: color 0.2s;
+    margin-top: -2px;
+}
+
+.toast-close:hover {
+    color: #ef4444;
+}
+
+/* Progress bar inside toast */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ef4444, #fca5a5);
+    border-radius: 0 0 0 0;
+    animation: toastProgress 4s linear both;
+    width: 100%;
+    transform-origin: left;
+}
+
+/* Highlight the missed field card */
+.question-card.toast-highlight,
+.input-group.toast-highlight input,
+.input-group.toast-highlight select,
+.input-group.toast-highlight textarea {
+    animation: fieldPulse 0.6s ease 2;
+}
+
+@keyframes fieldPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+        border-color: #ef4444;
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+        border-color: #ef4444;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        border-color: #ef4444;
+    }
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(120%) scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes toastSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(120%) scale(0.92);
+    }
+}
+
+@keyframes toastProgress {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+@media (max-width: 480px) {
+    #toastContainer {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+    }
+
+    .toast-warn {
+        min-width: unset;
+        max-width: 100%;
     }
 }

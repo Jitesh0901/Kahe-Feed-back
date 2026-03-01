@@ -34,6 +34,72 @@ document.addEventListener("DOMContentLoaded", function () {
     var RADIO_QUESTION_NAMES = ["q2", "q3", "q4", "q5"];
     var TEXT_QUESTION_IDS = ["q1", "q6", "q7"];
 
+    /* ── Field display names for toast messages ── */
+    var FIELD_LABELS = {
+        studentName: "Student Name",
+        rollNumber: "Student ID / Roll Number",
+        studentDegree: "Student Degree",
+        q1: "Q1 – Area of Interest",
+        q2: "Q2 – Trainer / Mentor",
+        q3: "Q3 – Did trainer ignite interest?",
+        q4: "Q4 – Lab & environment support",
+        q5: "Q5 – Overall training rating",
+        q6: "Q6 – Tools you will use",
+        q7: "Q7 – Personal review"
+    };
+
+    /* ══════════════════════════════════════════════
+       TOAST NOTIFICATION SYSTEM
+    ══════════════════════════════════════════════ */
+    // Create container once
+    var toastContainer = document.getElementById("toastContainer");
+    if (!toastContainer) {
+        toastContainer = document.createElement("div");
+        toastContainer.id = "toastContainer";
+        document.body.appendChild(toastContainer);
+    }
+
+    function showToast(fieldKey, message, targetEl) {
+        var label = FIELD_LABELS[fieldKey] || fieldKey;
+        var t = document.createElement("div");
+        t.className = "toast-warn";
+        t.innerHTML =
+            '<span class="toast-icon">⚠️</span>' +
+            '<div class="toast-body">' +
+            '<div class="toast-title">Required Field Missing</div>' +
+            '<div class="toast-msg"><strong>' + label + '</strong><br>' + (message || 'This field cannot be empty.') + '</div>' +
+            '</div>' +
+            '<button class="toast-close" title="Dismiss">✕</button>' +
+            '<div class="toast-progress"></div>';
+
+        toastContainer.appendChild(t);
+
+        // Close button
+        t.querySelector(".toast-close").addEventListener("click", function () { dismissToast(t); });
+
+        // Auto-dismiss after 4s
+        var timer = setTimeout(function () { dismissToast(t); }, 4200);
+        t.addEventListener("mouseenter", function () { clearTimeout(timer); });
+        t.addEventListener("mouseleave", function () { timer = setTimeout(function () { dismissToast(t); }, 2000); });
+
+        // Scroll to + pulse highlight the field
+        if (targetEl) {
+            var card = targetEl.closest(".question-card") || targetEl.closest(".input-group") || targetEl;
+            card.classList.remove("toast-highlight"); void card.offsetWidth;
+            card.classList.add("toast-highlight");
+            card.addEventListener("animationend", function () { card.classList.remove("toast-highlight"); }, { once: true });
+            setTimeout(function () {
+                card.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 80);
+        }
+    }
+
+    function dismissToast(t) {
+        if (!t || !t.parentNode) return;
+        t.classList.add("toast-hide");
+        t.addEventListener("animationend", function () { if (t.parentNode) t.parentNode.removeChild(t); }, { once: true });
+    }
+
     /* ═══════════════════════════════════════════════════
        OFFLINE QUEUE
     ═══════════════════════════════════════════════════ */
@@ -96,6 +162,27 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             submitBtn.classList.remove("shake"); void submitBtn.offsetWidth; submitBtn.classList.add("shake");
             submitBtn.addEventListener("animationend", function () { submitBtn.classList.remove("shake"); }, { once: true });
+            // Find the FIRST unfilled field and toast it
+            var firstMissing = null;
+            for (var i = 0; i < TEXT_FIELD_IDS.length; i++) {
+                var tf = document.getElementById(TEXT_FIELD_IDS[i]);
+                if (tf && !tf.value.trim()) { firstMissing = { key: TEXT_FIELD_IDS[i], el: tf }; break; }
+            }
+            if (!firstMissing) {
+                for (var j = 0; j < TEXT_QUESTION_IDS.length; j++) {
+                    var tq = document.getElementById(TEXT_QUESTION_IDS[j]);
+                    if (tq && !tq.value.trim()) { firstMissing = { key: TEXT_QUESTION_IDS[j], el: tq }; break; }
+                }
+            }
+            if (!firstMissing) {
+                for (var k = 0; k < RADIO_QUESTION_NAMES.length; k++) {
+                    var rn = RADIO_QUESTION_NAMES[k];
+                    if (!document.querySelector('input[name="' + rn + '"]:checked')) {
+                        firstMissing = { key: rn, el: document.getElementById(rn + "-card") }; break;
+                    }
+                }
+            }
+            if (firstMissing) showToast(firstMissing.key, "You haven't filled this field yet. Please complete it.", firstMissing.el);
         }
     });
 
@@ -105,27 +192,58 @@ document.addEventListener("DOMContentLoaded", function () {
     var q5k = document.getElementById("q5-card");
     if (q5c) {
         q5c.querySelectorAll("input[type='radio']").forEach(function (r) {
-            r.addEventListener("change", function () { if (q5l) q5l.textContent = RATING_LABELS[r.value] || ""; if (q5k) q5k.classList.add("answered"); clearError("err-q5"); checkFormReady(); });
+            r.addEventListener("change", function () {
+                if (q5l) q5l.textContent = RATING_LABELS[r.value] || "";
+                if (q5k) { q5k.classList.add("answered"); q5k.classList.remove("missing"); }
+                clearError("err-q5"); checkFormReady();
+            });
         });
     }
 
     ["q2", "q3", "q4"].forEach(function (n) {
         var card = document.getElementById(n + "-card");
         document.querySelectorAll('input[name="' + n + '"]').forEach(function (r) {
-            r.addEventListener("change", function () { if (card) card.classList.add("answered"); clearError("err-" + n); checkFormReady(); });
+            r.addEventListener("change", function () {
+                if (card) { card.classList.add("answered"); card.classList.remove("missing"); }
+                clearError("err-" + n); checkFormReady();
+            });
         });
     });
 
     TEXT_FIELD_IDS.concat(TEXT_QUESTION_IDS).forEach(function (id) {
         var el = document.getElementById(id); if (!el) return;
-        el.addEventListener("input", checkFormReady);
-        el.addEventListener("change", checkFormReady);
+        el.addEventListener("input", function () { clearMissing(id, false); checkFormReady(); });
+        el.addEventListener("change", function () { clearMissing(id, false); checkFormReady(); });
     });
 
     /* ── Validation ── */
     function showError(id, msg) { var el = document.getElementById(id); if (el) el.textContent = msg; }
     function clearError(id) { var el = document.getElementById(id); if (el) el.textContent = ""; }
     function markInput(el, v) { el.classList.toggle("valid", v); el.classList.toggle("invalid", !v); }
+
+    /* ── Missing-field visual marker ── */
+    function markMissing(idOrName, isCard) {
+        if (isCard) {
+            var card = document.getElementById(idOrName + "-card");
+            if (card) card.classList.add("missing");
+        } else {
+            var el = document.getElementById(idOrName);
+            if (!el) return;
+            var grp = el.closest(".input-group");
+            if (grp) grp.classList.add("missing");
+        }
+    }
+    function clearMissing(idOrName, isCard) {
+        if (isCard) {
+            var card = document.getElementById(idOrName + "-card");
+            if (card) { card.classList.remove("missing"); }
+        } else {
+            var el = document.getElementById(idOrName);
+            if (!el) return;
+            var grp = el.closest(".input-group");
+            if (grp) grp.classList.remove("missing");
+        }
+    }
 
     var validations = {
         studentName: { fn: function (v) { return v.trim().length >= 2; }, msg: "Enter your full name (min 2 chars)." },
@@ -211,25 +329,51 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         if (errorMessage) errorMessage.classList.add("hidden");
 
-        /* Validate */
+        /* Validate — show toast for EACH missing field */
         var hasErrors = false;
+        var firstErrorEl = null;
+
         Object.keys(validations).forEach(function (id) {
             var rule = validations[id]; var el = document.getElementById(id); if (!el) return;
-            if (!el.value.trim()) { markInput(el, false); showError("err-" + id, "This field is required."); hasErrors = true; }
-            else if (!rule.fn(el.value)) { markInput(el, false); showError("err-" + id, rule.msg); hasErrors = true; }
-        });
-        RADIO_QUESTION_NAMES.forEach(function (n) {
-            if (!document.querySelector('input[name="' + n + '"]:checked')) {
-                showError("err-" + n, "Please select an option.");
-                var card = document.getElementById(n + "-card"); if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+            if (!el.value.trim()) {
+                markInput(el, false);
+                showError("err-" + id, "This field is required.");
+                showToast(id, "You haven't filled this field yet. Please complete it to submit.", el);
+                markMissing(id, false);
+                if (!firstErrorEl) firstErrorEl = el;
+                hasErrors = true;
+            } else if (!rule.fn(el.value)) {
+                markInput(el, false);
+                showError("err-" + id, rule.msg);
+                showToast(id, rule.msg, el);
+                markMissing(id, false);
+                if (!firstErrorEl) firstErrorEl = el;
                 hasErrors = true;
             }
         });
+
+        RADIO_QUESTION_NAMES.forEach(function (n) {
+            if (!document.querySelector('input[name="' + n + '"]:checked')) {
+                showError("err-" + n, "Please select an option.");
+                var card = document.getElementById(n + "-card");
+                showToast(n, "Please choose one of the options to continue.", card);
+                markMissing(n, true);
+                if (!firstErrorEl) firstErrorEl = card;
+                hasErrors = true;
+            }
+        });
+
         if (hasErrors) {
-            var first = form.querySelector(".invalid,.field-error:not(:empty)");
-            if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+            if (firstErrorEl) {
+                setTimeout(function () {
+                    firstErrorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 100);
+            }
             return;
         }
+
+        /* All good — clear any leftover missing marks */
+        document.querySelectorAll(".missing").forEach(function (el) { el.classList.remove("missing"); });
 
         /* Build payload — keys match Apps Script FIELD_KEYS exactly */
         var data = {
