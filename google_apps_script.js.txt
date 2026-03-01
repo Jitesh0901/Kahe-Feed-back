@@ -1,0 +1,114 @@
+/**
+ * ══════════════════════════════════════════════════════════
+ *  J-Impact — Gen AI Feedback Form  |  Google Apps Script
+ *  Paste this ENTIRE file into your Apps Script editor.
+ *  Deploy → New Deployment → Web App → Anyone → Deploy
+ * ══════════════════════════════════════════════════════════
+ */
+
+// ── Column headers (must match payload keys in script.js) ──
+var FIELD_KEYS = [
+  "timestamp",
+  "studentName",
+  "rollNumber",
+  "studentDegree",
+  "q1",   // Area of Interest
+  "q2",   // Trainer
+  "q3",   // Ignited interest?
+  "q4",   // Lab support?
+  "q5",   // Overall rating (1–5)
+  "q6",   // Tools to use
+  "q7"    // Personal review
+];
+
+var HEADERS = [
+  "Timestamp",
+  "Student Name",
+  "Roll Number",
+  "Degree",
+  "Q1 – Area of Interest",
+  "Q2 – Trainer",
+  "Q3 – Interest Ignited?",
+  "Q4 – Lab Support?",
+  "Q5 – Overall Rating",
+  "Q6 – Tools to Use",
+  "Q7 – Personal Review"
+];
+
+// ── Allow CORS so the browser form can reach this script ──
+function setCORSHeaders(output) {
+  return output
+    .setHeader("Access-Control-Allow-Origin", "*")
+    .setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+    .setHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+
+// ── Handle preflight OPTIONS request ─────────────────────
+function doOptions() {
+  return setCORSHeaders(
+    ContentService.createTextOutput("")
+  );
+}
+
+// ── Handle POST from the feedback form ───────────────────
+function doPost(e) {
+  try {
+    var raw  = e && e.postData && e.postData.contents ? e.postData.contents : "{}";
+    var data = JSON.parse(raw);
+    appendRow(data);
+    return setCORSHeaders(
+      ContentService
+        .createTextOutput(JSON.stringify({ result: "success" }))
+        .setMimeType(ContentService.MimeType.JSON)
+    );
+  } catch (err) {
+    return setCORSHeaders(
+      ContentService
+        .createTextOutput(JSON.stringify({ result: "error", message: err.toString() }))
+        .setMimeType(ContentService.MimeType.JSON)
+    );
+  }
+}
+
+// ── Handle GET (fallback / offline-queue flush) ───────────
+function doGet(e) {
+  try {
+    var raw  = e && e.parameter && e.parameter.data ? e.parameter.data : "{}";
+    var data = JSON.parse(raw);
+    if (data.studentName) appendRow(data);
+    return setCORSHeaders(
+      ContentService
+        .createTextOutput(JSON.stringify({ result: "success" }))
+        .setMimeType(ContentService.MimeType.JSON)
+    );
+  } catch (err) {
+    return setCORSHeaders(
+      ContentService
+        .createTextOutput(JSON.stringify({ result: "error", message: err.toString() }))
+        .setMimeType(ContentService.MimeType.JSON)
+    );
+  }
+}
+
+// ── Write one row to the first sheet ─────────────────────
+function appendRow(data) {
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheets()[0];   // ← always uses the FIRST tab
+
+  // Auto-create header row if sheet is empty
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(HEADERS);
+    sheet.getRange(1, 1, 1, HEADERS.length)
+         .setFontWeight("bold")
+         .setBackground("#4a90d9")
+         .setFontColor("#ffffff");
+    sheet.setFrozenRows(1);
+  }
+
+  // Build the row in the correct column order
+  var row = FIELD_KEYS.map(function(key) {
+    return data[key] !== undefined ? data[key] : "";
+  });
+
+  sheet.appendRow(row);
+}
